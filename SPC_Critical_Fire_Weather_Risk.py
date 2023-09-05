@@ -39,7 +39,6 @@ grbs = pygrib.open('ds.critfireo.bin')
 
 grbs.seek(0)
 
-# Gets current date and time
 grb_12 = grbs[1]
 if grb_12:
     grb_12_logic = True
@@ -54,6 +53,7 @@ if grb_48:
 
 lats, lons = grb_12.latlons()
 
+# Gets current date and time
 now = datetime.utcnow()
 year = now.year
 month = now.month
