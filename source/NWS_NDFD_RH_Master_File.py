@@ -2,6 +2,10 @@
 # THIS IS THE MASTER FILE FOR THE NWS NDFD GRAPHICS
 #
 # THESE GRAPHICS INCLUDE:
+# 1) NWS Forecast and forecast trends for Max RH
+# 2) NWS Forecast and forecast trends for Min RH
+# 3) NWS Max RH Forecast filtering areas with poor overnight RH recovery (RH <= 30%)
+# 4) NWS Min RH Forecast filtering areas with RFW RH criteria (RH <= 15%)
 #
 #
 #                            |----------------------------------------|
