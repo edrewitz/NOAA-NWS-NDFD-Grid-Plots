@@ -6,6 +6,9 @@
 # 2) NWS Forecast and forecast trends for Min RH
 # 3) NWS Max RH Forecast filtering areas with poor overnight RH recovery (RH <= 30%)
 # 4) NWS Min RH Forecast filtering areas with RFW RH criteria (RH <= 15%)
+# 5) NWS Max RH Forecast filtering areas with excellent overnight RH recovery (RH >= 80%)
+#
+#
 #
 #
 #                            |----------------------------------------|
@@ -515,6 +518,256 @@ if hour > 6 and hour <= 18:
         cs2 = ax2.contourf(lons_max_rh, lats_max_rh, diff_max_rh_3, levels=np.arange(-50, 50, 5), cmap='BrBG', transform=datacrs_max_RH)
         cbar_RH2 = fig_max_RH.colorbar(cs2, shrink=0.80)
         cbar_RH2.set_label(label="Max RH Trend (%)", fontweight='bold')
+
+
+#######################################################
+#
+#
+#
+# MAXIMUM RH FILTERED >= 80% (EXCELLENT RH RECOVERY ONLY)
+#
+#
+#       
+#######################################################
+
+if hour > 18 or hour <= 6:
+    if count_max_rh == 2:
+        fig_max_RH_good = plt.figure(figsize=(9,5))
+    if count_max_rh >= 3 and grb_max_rh_72_logic == False:
+        fig_max_RH_good = plt.figure(figsize=(15,5))
+    if count_max_rh >= 3 and grb_max_rh_72_logic == True:
+        fig_max_RH_good = plt.figure(figsize=(12,12)) 
+
+if hour > 6 and hour <= 18:
+    if count_max_rh == 2:
+        fig_max_RH_good = plt.figure(figsize=(7,5))
+    if count_max_rh >= 3 and grb_max_rh_72_logic == False:
+        fig_max_RH_good = plt.figure(figsize=(9,5))
+    if count_max_rh >= 3 and grb_max_rh_72_logic == True:
+        fig_max_RH_good = plt.figure(figsize=(15,5)) 
+    
+fig_max_RH_good.text(0.13, 0.06, 'Developed by: Eric Drewitz - Powered by MetPy | Data Source: NOAA/NWS/NDFD\nImage Created: ' + date1.strftime('%m/%d/%Y %H:%MZ'), fontweight='bold')
+
+# PLOT FOR WHEN PROGRAM RUNS BETWEEN 18z AND 06z
+if hour > 18 or hour <= 6:
+    if count_max_rh == 2:
+        #------------------------------------------------------------------------------------------------------------------
+        # Night 1 maxRH plot
+        #-------------------------------------------------------------------------------------------------------------------
+        ax = plt.subplot(1, 2, 1, projection=mapcrs_max_RH)
+        ax.set_extent([-122, -114, 31, 39], datacrs_max_RH)
+        ax.add_feature(cfeature.COASTLINE.with_scale('50m'), linewidth=0.75)
+        ax.add_feature(cfeature.STATES, linewidth=0.5)
+        ax.add_feature(USCOUNTIES, linewidth=0.75)
+        ax.set_title('Maximum RH Forecast\n(Filtered Maximum RH >= 80%)\nStart: '+ grib_file_1_max_rh_start.strftime('%m/%d/%Y %HZ') + '\nEnd:'+ grib_file_1_max_rh_end.strftime('%m/%d/%Y %HZ'), fontsize=10, fontweight='bold', loc='center')
+        
+        cs = ax.contourf(lons_max_rh, lats_max_rh, grb_max_rh_12.values, levels=np.arange(80, 101, 1), cmap='Greens', transform=datacrs_max_RH)
+        cbar_RH = fig_max_RH_good.colorbar(cs, shrink=0.80)
+        cbar_RH.set_label(label="Max RH (%)", fontweight='bold')
+        #---------------------------------------------------------------------------------------------------------------------
+        # Night 2 Trend
+        #--------------------------------------------------------------------------------------------------------------------------------
+        ax1 = plt.subplot(1, 2, 2, projection=mapcrs_max_RH)
+        ax1.set_extent([-122, -114, 31, 39], datacrs_max_RH)
+        ax1.add_feature(cfeature.COASTLINE.with_scale('50m'), linewidth=0.75)
+        ax1.add_feature(cfeature.STATES, linewidth=0.5)
+        ax1.add_feature(USCOUNTIES, linewidth=0.75)
+        ax1.set_title('Maximum RH Forecast\n(Filtered Maximum RH >= 80%)\nStart: '+ grib_file_2_max_rh_start.strftime('%m/%d/%Y %HZ') + '\nEnd:'+ grib_file_2_max_rh_end.strftime('%m/%d/%Y %HZ'), fontsize=10, fontweight='bold', loc='center')
+        
+        cs1 = ax1.contourf(lons_max_rh, lats_max_rh, grb_max_rh_24.values, levels=np.arange(80, 101, 1), cmap='Greens', transform=datacrs_max_RH)
+        cbar_RH1 = fig_max_RH_good.colorbar(cs1, shrink=0.80)
+        cbar_RH1.set_label(label="Max RH (%)", fontweight='bold')
+
+    if count_max_rh >= 3 and grb_max_rh_72_logic == False:
+        #------------------------------------------------------------------------------------------------------------------
+        # Night 1 maxRH plot
+        #-------------------------------------------------------------------------------------------------------------------
+        ax = plt.subplot(1, 3, 1, projection=mapcrs_max_RH)
+        ax.set_extent([-122, -114, 31, 39], datacrs_max_RH)
+        ax.add_feature(cfeature.COASTLINE.with_scale('50m'), linewidth=0.75)
+        ax.add_feature(cfeature.STATES, linewidth=0.5)
+        ax.add_feature(USCOUNTIES, linewidth=0.75)
+        ax.set_title('Maximum RH Forecast\n(Filtered Maximum RH >= 80%)\nStart: '+ grib_file_1_max_rh_start.strftime('%m/%d/%Y %HZ') + '\nEnd:'+ grib_file_1_max_rh_end.strftime('%m/%d/%Y %HZ'), fontsize=10, fontweight='bold', loc='center')
+        
+        cs = ax.contourf(lons_max_rh, lats_max_rh, grb_max_rh_12.values, levels=np.arange(80, 101, 1), cmap='Greens', transform=datacrs_max_RH)
+        
+        cbar_RH = fig_max_RH_good.colorbar(cs, shrink=0.80)
+        cbar_RH.set_label(label="Max RH (%)", fontweight='bold')
+        #---------------------------------------------------------------------------------------------------------------------
+        # Night 2 Trend
+        #--------------------------------------------------------------------------------------------------------------------------------
+        ax1 = plt.subplot(1, 3, 2, projection=mapcrs_max_RH)
+        ax1.set_extent([-122, -114, 31, 39], datacrs_max_RH)
+        ax1.add_feature(cfeature.COASTLINE.with_scale('50m'), linewidth=0.75)
+        ax1.add_feature(cfeature.STATES, linewidth=0.5)
+        ax1.add_feature(USCOUNTIES, linewidth=0.75)
+        ax1.set_title('Maximum RH Forecast\n(Filtered Maximum RH >= 80%)\nStart: '+ grib_file_2_max_rh_start.strftime('%m/%d/%Y %HZ') + '\nEnd:'+ grib_file_2_max_rh_end.strftime('%m/%d/%Y %HZ'), fontsize=10, fontweight='bold', loc='center')
+        
+        cs1 = ax1.contourf(lons_max_rh, lats_max_rh, grb_max_rh_24.values, levels=np.arange(80, 101, 1), cmap='Greens', transform=datacrs_max_RH)
+        cbar_RH1 = fig_max_RH_good.colorbar(cs1, shrink=0.80)
+        cbar_RH1.set_label(label="Max RH (%)", fontweight='bold')
+        #---------------------------------------------------------------------------------------------------------------------
+        # Night 3 Trend
+        #--------------------------------------------------------------------------------------------------------------------------------
+        ax2 = plt.subplot(1, 3, 3, projection=mapcrs_max_RH)
+        ax2.set_extent([-122, -114, 31, 39], datacrs_max_RH)
+        ax2.add_feature(cfeature.COASTLINE.with_scale('50m'), linewidth=0.75)
+        ax2.add_feature(cfeature.STATES, linewidth=0.5)
+        ax2.add_feature(USCOUNTIES, linewidth=0.75)
+        ax2.set_title('Maximum RH Forecast\n(Filtered Maximum RH >= 80%)\nStart: '+ grib_file_3_max_rh_start.strftime('%m/%d/%Y %HZ') + '\nEnd:'+ grib_file_3_max_rh_end.strftime('%m/%d/%Y %HZ'), fontsize=10, fontweight='bold', loc='center')
+        
+        cs2 = ax2.contourf(lons_max_rh, lats_max_rh, grb_max_rh_48.values, levels=np.arange(80, 101, 1), cmap='Greens', transform=datacrs_max_RH)
+        cbar_RH2 = fig_max_RH_good.colorbar(cs2, shrink=0.80)
+        cbar_RH2.set_label(label="Max RH (%)", fontweight='bold')
+
+    if count_max_rh >= 3 and grb_max_rh_72_logic == True:
+        #------------------------------------------------------------------------------------------------------------------
+        # Night 1 maxRH plot
+        #-------------------------------------------------------------------------------------------------------------------
+        ax = plt.subplot(2, 2, 1, projection=mapcrs_max_RH)
+        ax.set_extent([-122, -114, 31, 39], datacrs_max_RH)
+        ax.add_feature(cfeature.COASTLINE.with_scale('50m'), linewidth=0.75)
+        ax.add_feature(cfeature.STATES, linewidth=0.5)
+        ax.add_feature(USCOUNTIES, linewidth=0.75)
+        ax.set_title('Maximum RH Forecast\n(Filtered Maximum RH >= 80%)\nStart: '+ grib_file_1_max_rh_start.strftime('%m/%d/%Y %HZ') + '\nEnd:'+ grib_file_1_max_rh_end.strftime('%m/%d/%Y %HZ'), fontsize=10, fontweight='bold', loc='center')
+        
+        cs = ax.contourf(lons_max_rh, lats_max_rh, grb_max_rh_12.values, levels=np.arange(80, 101, 1), cmap='Greens', transform=datacrs_max_RH)
+        
+        cbar_RH = fig_max_RH_good.colorbar(cs, shrink=0.80)
+        cbar_RH.set_label(label="Max RH (%)", fontweight='bold')
+        #---------------------------------------------------------------------------------------------------------------------
+        # Night 2 Trend
+        #--------------------------------------------------------------------------------------------------------------------------------
+        ax1 = plt.subplot(2, 2, 2, projection=mapcrs_max_RH)
+        ax1.set_extent([-122, -114, 31, 39], datacrs_max_RH)
+        ax1.add_feature(cfeature.COASTLINE.with_scale('50m'), linewidth=0.75)
+        ax1.add_feature(cfeature.STATES, linewidth=0.5)
+        ax1.add_feature(USCOUNTIES, linewidth=0.75)
+        ax1.set_title('Maximum RH Forecast\n(Filtered Maximum RH >= 80%)\nStart: '+ grib_file_2_max_rh_start.strftime('%m/%d/%Y %HZ') + '\nEnd:'+ grib_file_2_max_rh_end.strftime('%m/%d/%Y %HZ'), fontsize=10, fontweight='bold', loc='center')
+        
+        cs1 = ax1.contourf(lons_max_rh, lats_max_rh, grb_max_rh_24.values, levels=np.arange(80, 101, 1), cmap='Greens', transform=datacrs_max_RH)
+        cbar_RH1 = fig_max_RH_good.colorbar(cs1, shrink=0.80)
+        cbar_RH1.set_label(label="Max RH (%)", fontweight='bold')
+        #---------------------------------------------------------------------------------------------------------------------
+        # Night 3 Trend
+        #--------------------------------------------------------------------------------------------------------------------------------
+        ax2 = plt.subplot(2, 2, 3, projection=mapcrs_max_RH)
+        ax2.set_extent([-122, -114, 31, 39], datacrs_max_RH)
+        ax2.add_feature(cfeature.COASTLINE.with_scale('50m'), linewidth=0.75)
+        ax2.add_feature(cfeature.STATES, linewidth=0.5)
+        ax2.add_feature(USCOUNTIES, linewidth=0.75)
+        ax2.set_title('Maximum RH Forecast\n(Filtered Maximum RH >= 80%)\nStart: '+ grib_file_3_max_rh_start.strftime('%m/%d/%Y %HZ') + '\nEnd:'+ grib_file_3_max_rh_end.strftime('%m/%d/%Y %HZ'), fontsize=10, fontweight='bold', loc='center')
+        
+        cs2 = ax2.contourf(lons_max_rh, lats_max_rh, grb_max_rh_48.values, levels=np.arange(80, 101, 1), cmap='Greens', transform=datacrs_max_RH)
+        cbar_RH2 = fig_max_RH_good.colorbar(cs2, shrink=0.80)
+        cbar_RH2.set_label(label="Max RH (%)", fontweight='bold')
+
+        #---------------------------------------------------------------------------------------------------------------------
+        # Night 4 Trend
+        #--------------------------------------------------------------------------------------------------------------------------------
+        ax3 = plt.subplot(2, 2, 4, projection=mapcrs_max_RH)
+        ax3.set_extent([-122, -114, 31, 39], datacrs_max_RH)
+        ax3.add_feature(cfeature.COASTLINE.with_scale('50m'), linewidth=0.75)
+        ax3.add_feature(cfeature.STATES, linewidth=0.5)
+        ax3.add_feature(USCOUNTIES, linewidth=0.75)
+        ax3.set_title('Maximum RH Forecast\n(Filtered Maximum RH >= 80%)\nStart: '+ grib_file_4_max_rh_start.strftime('%m/%d/%Y %HZ') + '\nEnd:'+ grib_file_4_max_rh_end.strftime('%m/%d/%Y %HZ'), fontsize=10, fontweight='bold', loc='center')
+        
+        cs3 = ax3.contourf(lons_max_rh, lats_max_rh, grb_max_rh_72.values, levels=np.arange(80, 101, 1), cmap='Greens', transform=datacrs_max_RH)
+        cbar_RH3 = fig_max_RH_good.colorbar(cs3, shrink=0.80)
+        cbar_RH3.set_label(label="Max RH (%)", fontweight='bold')
+
+
+# PLOT FOR WHEN PROGRAM RUNS BETWEEN 01z AND 13z
+if hour > 6 and hour <= 18:
+    if count_max_rh == 2:
+        #------------------------------------------------------------------------------------------------------------------
+        # Night 1 maxRH plot
+        #-------------------------------------------------------------------------------------------------------------------
+        ax = plt.subplot(1, 1, 1, projection=mapcrs_max_RH)
+        ax.set_extent([-122, -114, 31, 39], datacrs_max_RH)
+        ax.add_feature(cfeature.COASTLINE.with_scale('50m'), linewidth=0.75)
+        ax.add_feature(cfeature.STATES, linewidth=0.5)
+        ax.add_feature(USCOUNTIES, linewidth=0.75)
+        ax.set_title('Maximum RH Forecast\n(Filtered Maximum RH >= 80%)\nStart: '+ grib_file_2_max_rh_start.strftime('%m/%d/%Y %HZ') + '\nEnd:'+ grib_file_2_max_rh_end.strftime('%m/%d/%Y %HZ'), fontsize=10, fontweight='bold', loc='center')
+            
+        cs = ax.contourf(lons_max_rh, lats_max_rh, grb_max_rh_24.values, levels=np.arange(80, 101, 1), cmap='Greens', transform=datacrs_max_RH)
+        cbar_RH = fig_max_RH_good.colorbar(cs, shrink=0.80)
+        cbar_RH.set_label(label="Max RH (%)", fontweight='bold')
+
+    if count_max_rh >= 3 and grb_max_rh_72_logic == False:
+        #------------------------------------------------------------------------------------------------------------------
+        # Night 2 maxRH plot
+        #-------------------------------------------------------------------------------------------------------------------
+        ax = plt.subplot(1, 2, 1, projection=mapcrs_max_RH)
+        ax.set_extent([-122, -114, 31, 39], datacrs_max_RH)
+        ax.add_feature(cfeature.COASTLINE.with_scale('50m'), linewidth=0.75)
+        ax.add_feature(cfeature.STATES, linewidth=0.5)
+        ax.add_feature(USCOUNTIES, linewidth=0.75)
+        ax.set_title('Maximum RH Forecast\n(Filtered Maximum RH >= 80%)\nStart: '+ grib_file_2_max_rh_start.strftime('%m/%d/%Y %HZ') + '\nEnd:'+ grib_file_2_max_rh_end.strftime('%m/%d/%Y %HZ'), fontsize=10, fontweight='bold', loc='center')
+        
+        cs = ax.contourf(lons_max_rh, lats_max_rh, grb_max_rh_24.values, levels=np.arange(80, 101, 1), cmap='Greens', transform=datacrs_max_RH)
+        
+        cbar_RH = fig_max_RH_good.colorbar(cs, shrink=0.80)
+        cbar_RH.set_label(label="Max RH (%)", fontweight='bold')
+        #---------------------------------------------------------------------------------------------------------------------
+        # Night 3
+        #--------------------------------------------------------------------------------------------------------------------------------
+        ax1 = plt.subplot(1, 2, 2, projection=mapcrs_max_RH)
+        ax1.set_extent([-122, -114, 31, 39], datacrs_max_RH)
+        ax1.add_feature(cfeature.COASTLINE.with_scale('50m'), linewidth=0.75)
+        ax1.add_feature(cfeature.STATES, linewidth=0.5)
+        ax1.add_feature(USCOUNTIES, linewidth=0.75)
+        ax1.set_title('Maximum RH Forecast\n(Filtered Maximum RH >= 80%)\nStart: '+ grib_file_3_max_rh_start.strftime('%m/%d/%Y %HZ') + '\nEnd:'+ grib_file_3_max_rh_end.strftime('%m/%d/%Y %HZ'), fontsize=10, fontweight='bold', loc='center')
+        
+        cs1 = ax1.contourf(lons_max_rh, lats_max_rh, grb_max_rh_48.values, levels=np.arange(80, 101, 1), cmap='Greens', transform=datacrs_max_RH)
+        cbar_RH1 = fig_max_RH_good.colorbar(cs1, shrink=0.80)
+        cbar_RH1.set_label(label="Max RH (%)", fontweight='bold')
+
+    if count_max_rh >= 3 and grb_max_rh_72_logic == True:
+        #------------------------------------------------------------------------------------------------------------------
+        # Night 2 maxRH plot
+        #-------------------------------------------------------------------------------------------------------------------
+        ax = plt.subplot(1, 3, 1, projection=mapcrs_max_RH)
+        ax.set_extent([-122, -114, 31, 39], datacrs_max_RH)
+        ax.add_feature(cfeature.COASTLINE.with_scale('50m'), linewidth=0.75)
+        ax.add_feature(cfeature.STATES, linewidth=0.5)
+        ax.add_feature(USCOUNTIES, linewidth=0.75)
+        ax.set_title('Maximum RH Forecast\n(Filtered Maximum RH >= 80%)\nStart: '+ grib_file_2_max_rh_start.strftime('%m/%d/%Y %HZ') + '\nEnd:'+ grib_file_2_max_rh_end.strftime('%m/%d/%Y %HZ'), fontsize=10, fontweight='bold', loc='center')
+        
+        cs = ax.contourf(lons_max_rh, lats_max_rh, grb_max_rh_24.values, levels=np.arange(80, 101, 1), cmap='Greens', transform=datacrs_max_RH)
+        
+        cbar_RH = fig_max_RH_good.colorbar(cs, shrink=0.80)
+        cbar_RH.set_label(label="Max RH (%)", fontweight='bold')
+        #---------------------------------------------------------------------------------------------------------------------
+        # Night 3
+        #--------------------------------------------------------------------------------------------------------------------------------
+        ax1 = plt.subplot(1, 3, 2, projection=mapcrs_max_RH)
+        ax1.set_extent([-122, -114, 31, 39], datacrs_max_RH)
+        ax1.add_feature(cfeature.COASTLINE.with_scale('50m'), linewidth=0.75)
+        ax1.add_feature(cfeature.STATES, linewidth=0.5)
+        ax1.add_feature(USCOUNTIES, linewidth=0.75)
+        ax1.set_title('Maximum RH Forecast\n(Filtered Maximum RH >= 80%)\nStart: '+ grib_file_3_max_rh_start.strftime('%m/%d/%Y %HZ') + '\nEnd:'+ grib_file_3_max_rh_end.strftime('%m/%d/%Y %HZ'), fontsize=10, fontweight='bold', loc='center')
+        
+        cs1 = ax1.contourf(lons_max_rh, lats_max_rh, grb_max_rh_48.values, levels=np.arange(80, 101, 1), cmap='Greens', transform=datacrs_max_RH)
+        cbar_RH1 = fig_max_RH_good.colorbar(cs1, shrink=0.80)
+        cbar_RH1.set_label(label="Max RH (%)", fontweight='bold')
+
+        #---------------------------------------------------------------------------------------------------------------------
+        # Night 4 Trend
+        #--------------------------------------------------------------------------------------------------------------------------------
+        ax3 = plt.subplot(1, 3, 3, projection=mapcrs_max_RH)
+        ax3.set_extent([-122, -114, 31, 39], datacrs_max_RH)
+        ax3.add_feature(cfeature.COASTLINE.with_scale('50m'), linewidth=0.75)
+        ax3.add_feature(cfeature.STATES, linewidth=0.5)
+        ax3.add_feature(USCOUNTIES, linewidth=0.75)
+        ax3.set_title('Maximum RH Forecast\n(Filtered Maximum RH >= 80%)\nStart: '+ grib_file_4_max_rh_start.strftime('%m/%d/%Y %HZ') + '\nEnd:'+ grib_file_4_max_rh_end.strftime('%m/%d/%Y %HZ'), fontsize=10, fontweight='bold', loc='center')
+        
+        cs3 = ax3.contourf(lons_max_rh, lats_max_rh, grb_max_rh_72.values, levels=np.arange(80, 101, 1), cmap='Greens', transform=datacrs_max_RH)
+        cbar_RH3 = fig_max_RH_TREND_ONLY.colorbar(cs3, shrink=0.80)
+        cbar_RH3.set_label(label="Max RH (%)", fontweight='bold') 
+
+
+
 
 
 #######################################################
@@ -1225,3 +1478,4 @@ fig_max_RH.savefig(f"Weather Data/NWS NDFD Max RH")
 fig_max_RH_filtered.savefig(f"Weather Data/NWS Filtered Poor Recovery Max RH")
 fig_min_RH.savefig(f"Weather Data/NWS NDFD Min RH")
 fig_min_RH_filtered.savefig(f"Weather Data/NWS Filtered Min RH")
+fig_max_RH_good.savefig(f"Weather Data/NWS Filtered Excellent RH Recovery")
