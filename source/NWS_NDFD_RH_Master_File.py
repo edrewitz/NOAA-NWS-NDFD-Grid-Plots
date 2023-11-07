@@ -760,7 +760,7 @@ if hour > 6 and hour <= 18:
         ax3.set_title('Maximum RH Forecast\n(Filtered Maximum RH <= 30%)\nStart: '+ grib_file_4_max_rh_start.strftime('%m/%d/%Y %HZ') + '\nEnd:'+ grib_file_4_max_rh_end.strftime('%m/%d/%Y %HZ'), fontsize=10, fontweight='bold', loc='center')
         
         cs3 = ax3.contourf(lons_max_rh, lats_max_rh, grb_max_rh_72.values, levels=np.arange(0, 31, 1), cmap='YlOrBr_r', transform=datacrs_max_RH)
-        cbar_RH3 = fig_max_RH_TREND_ONLY.colorbar(cs3, shrink=0.80)
+        cbar_RH3 = fig_max_RH_filtered.colorbar(cs3, shrink=0.80)
         cbar_RH3.set_label(label="Max RH (%)", fontweight='bold')       
 
 #*****************************************************************************************************
